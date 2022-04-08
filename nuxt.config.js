@@ -24,6 +24,7 @@ export default {
     'ant-design-vue/dist/antd.css',
     'static/fonts/ALS-hauss/stylesheet.css',
     'static/fonts/Rubik/stylesheet.css',
+    'static/fonts/icomoon/style.css',
     'static/css/main.css',
   ],
 
