@@ -8,11 +8,13 @@
     <div class="home">
       <div class="container">
         <div class="home-wrapper">
-          <h2 class="title">Здравствуйте, Константин Константинович!</h2>
+          <h2 class="title">
+            Здравствуйте, {{ getVariables && getVariables.name }}!
+          </h2>
           <a-row :gutter="[8, 16]">
             <a-col span="12">
               <div class="home-card">
-                <h4>Занятий  пройдено</h4>
+                <h4>Занятий пройдено</h4>
                 <span class="home-card-blue">5 <span>/10</span></span>
               </div>
             </a-col>
@@ -36,11 +38,21 @@
       <div class="container">
         <div class="employment-wrapper">
           <h2 class="title">Упражнения в занятии</h2>
-          <a-row :gutter="[0, 8]">
-            <a-col span="24">
+          <a-row
+            :gutter="[0, 8]"
+            v-if="getVariables && getVariables.currentProgram"
+          >
+            <a-col
+              span="24"
+              v-for="(item, key) in getVariables.currentProgram"
+              :key="key"
+            >
               <div class="employment-card">
-                <h4>Миофасциальный релиз  ягодичной области</h4>
-                <span>Подходы: 1 х 60 сек / Отдых: 10 сек</span>
+                <h4>{{ key }}</h4>
+                <span
+                  >Подходы: {{ item.approach }} х 60 сек / Отдых:
+                  {{ item.rest_sec }} сек</span
+                >
               </div>
             </a-col>
             <a-col span="24">
@@ -63,7 +75,24 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "IndexPage",
+  data() {
+    return {
+      //
+    };
+  },
+  mounted() {
+    this.getDetail();
+  },
+  methods: {
+    async getDetail() {
+      await this.$store.dispatch("home/getDetail");
+    },
+  },
+  computed: {
+    ...mapGetters("home", ["getClient", "getVariables"]),
+  },
 };
 </script>
