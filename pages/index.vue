@@ -47,25 +47,19 @@
               v-for="(item, key) in getVariables.currentProgram"
               :key="key"
             >
-              <div class="employment-card">
-                <h4>{{ key }}</h4>
-                <span
-                  >Подходы: {{ item.approach }} х 60 сек / Отдых:
-                  {{ item.rest_sec }} сек</span
-                >
-              </div>
-            </a-col>
-            <a-col span="24">
-              <div class="employment-card">
-                <h4>Ракушка</h4>
-                <span>Подходы: 2 х 12 / Отдых: 90 сек</span>
-              </div>
-            </a-col>
-            <a-col span="24">
-              <div class="employment-card">
-                <h4>Боковая планка</h4>
-                <span>Подходы: 3 х 60 сек / Отдых: 60 сек</span>
-              </div>
+              <nuxt-link
+                :to="`/exercises/${item.exercise_id}`"
+                tag="div"
+                class="col-link"
+              >
+                <div class="employment-card">
+                  <h4>{{ key }}</h4>
+                  <span
+                    >Подходы: {{ item.approach }} х 60 сек / Отдых:
+                    {{ item.rest_sec }} сек</span
+                  >
+                </div>
+              </nuxt-link>
             </a-col>
           </a-row>
         </div>
@@ -83,14 +77,8 @@ export default {
       //
     };
   },
-  mounted() {
-    this.getDetail();
-  },
-  methods: {
-    async getDetail() {
-      await this.$store.dispatch("home/getDetail");
-    },
-  },
+  mounted() {},
+  methods: {},
   computed: {
     ...mapGetters("home", ["getClient", "getVariables"]),
   },

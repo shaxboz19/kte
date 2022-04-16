@@ -1,0 +1,110 @@
+<template>
+  <div class="employment-detail">
+    <div class="employment-detail-video" v-if="getExercise">
+      <i class="icon-play"></i>
+      <!-- <img src="@/static/images/poster.jpg" alt="poster" /> -->
+      <div id="yandex-player"></div>
+    </div>
+    <div class="container">
+      <div class="employment-detail-wrapper">
+        <div class="employment-detail-header" v-if="getExercise && getProgram">
+          <h4>{{ getExercise.exercise }}</h4>
+          <span
+            >Подходы: {{ getProgram.approach }} х 60 сек / Отдых:
+            {{ getProgram.rest_sec }} сек</span
+          >
+        </div>
+        <div class="employment-detail-content" v-if="getExercise">
+          <b>⚽ Вам потребуется: </b>
+          <p>{{ getExercise.equipment }}</p>
+          <b>👉 Исходное положение:</b>
+          <p>{{ getExercise.position }}</p>
+          <b>💪 Выполнение:</b> <b><i>Упрощенный вариант исполнения:</i></b>
+
+          <ul>
+            <li>
+              {{ getExercise.execution }}
+            </li>
+            <!-- <li>2. То же в обратном направлении</li> -->
+          </ul>
+          <b><i>Продвинутый вариант исполнения:</i></b>
+          <ul>
+            <li>
+              {{ getExercise.execution }}
+            </li>
+          </ul>
+          <b>❗️Важно:</b>
+          <ul>
+            <li>
+              {{ getExercise.attention }}
+            </li>
+          </ul>
+
+          <b>❌ Не допускается:</b>
+          <ul>
+            <li>{{ getExercise.avoid }}</li>
+          </ul>
+        </div>
+        <div class="employment-detail-footer">
+          <a-row :gutter="[8, 8]">
+            <a-col span="24">
+              <a-button class="dark-red" @click="toStart">Приступить</a-button>
+            </a-col>
+            <a-col span="12">
+              <a-button class="light-red">Завершить</a-button>
+            </a-col>
+            <a-col span="12">
+              <a-button class="light-red">Пропустить</a-button>
+            </a-col>
+          </a-row>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+export default {
+  data() {
+    return {};
+  },
+  mounted() {
+    // setTimeout(() => {
+    //   let player = Yandex.VH.Player("yandex-player", {
+    //     contentId: "WdTHDBhWDKvdlQ/60645072bc4bb66f914ee907",
+    //   });
+    // }, 500);
+  },
+  methods: {
+    toStart() {
+      this.$router.push({
+        name: "execute",
+        query: {
+          id: this.$route.params.id,
+        },
+      });
+    },
+  },
+  computed: {
+    ...mapGetters("home", ["getVariables"]),
+    getExercise() {
+      return (
+        this.getVariables &&
+        this.getVariables.exercises.find((e) => {
+          return e.exercise_id == this.$route.params.id;
+        })
+      );
+    },
+    getProgram() {
+      return (
+        this.getVariables &&
+        this.getExercise &&
+        this.getVariables.currentProgram[this.getExercise.exercise]
+      );
+    },
+  },
+};
+</script>
+
+<style></style>

@@ -14,7 +14,7 @@ export const mutations = {
 
 export const actions = {
     async getDetail({commit}, id) {  
-        const {data} = await this.$axios.get('https://m.bot-marketing.com/api/public/tunnelSessions/J6h4OY3M')
+        const {data} = await this.$axios.get('https://m.bot-marketing.com/api/public/tunnelSessions/MAhQp1AD')
         const {client} = data
         commit('setClient', client)
         commit('setVariables', data.variables)

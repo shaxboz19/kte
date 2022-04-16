@@ -385,7 +385,9 @@ button.no-bg {
 .result p b {
     display: block;
 }
-
+.col-link {
+    cursor: pointer;
+}
 /* resultÎ */
 
 /* template layout end */

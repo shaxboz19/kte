@@ -14,8 +14,16 @@
 </template>
 
 <script>
-export default {};
+export default {
+  mounted() {
+    this.getDetail();
+  },
+  methods: {
+    async getDetail() {
+      await this.$store.dispatch("home/getDetail");
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>
