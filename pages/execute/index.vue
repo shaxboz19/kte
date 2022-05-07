@@ -19,14 +19,16 @@
     <div class="pages-action">
       <a-row :gutter="[8, 8]">
         <a-col span="12">
-          <a-button class="light-red"> Завершить </a-button>
+          <a-button class="light-red" @click="stop"> Завершить </a-button>
         </a-col>
         <a-col span="12">
-          <a-button class="light-red"> Не смог сделать </a-button>
+          <a-button class="light-red" @click="notAble">
+            Не смог сделать
+          </a-button>
         </a-col>
 
         <a-col span="24">
-          <a-button class="dark-red"> Готово </a-button>
+          <a-button class="dark-red" @click="done"> Готово </a-button>
         </a-col>
       </a-row>
     </div>
@@ -34,7 +36,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -54,9 +56,44 @@ export default {
       }
     }, 1000);
   },
-  methods: {},
+  methods: {
+    async stop() {
+      try {
+        const { data } = await this.$axios.post(`/${this.client}/request`, {
+          code: "skip",
+        });
+        console.log(data);
+      } catch ({ message }) {
+        throw new Error(message);
+      }
+    },
+    async notAble() {
+      try {
+        const { data } = await this.$axios.post(`/${this.client}/request`, {
+          code: "not_able",
+        });
+        console.log(data);
+      } catch ({ message }) {
+        throw new Error(message);
+      }
+    },
+    async done() {
+      try {
+        const { data } = await this.$axios.post(`/${this.client}/request`, {
+          code: "done",
+        });
+        this.$store.commit("home/setVariables", data.variables);
+        this.$router.push({
+          name: "result",
+        });
+      } catch ({ message }) {
+        throw new Error(message);
+      }
+    },
+  },
   computed: {
     ...mapGetters("home", ["getVariables"]),
+    ...mapState(["client"]),
     getExercise() {
       return (
         this.getVariables &&

@@ -35,7 +35,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@/plugins/antd-ui'
+    '@/plugins/antd-ui',
+    '@/plugins/VueScroll.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -43,12 +44,16 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    '@nuxtjs/moment',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios'
   ],
+  axios: {
+    baseURL: 'https://m.bot-marketing.com/api/public/tunnelSessions',
+  },
   
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

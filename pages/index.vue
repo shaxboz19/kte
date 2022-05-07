@@ -25,10 +25,14 @@
               </div>
             </a-col>
             <a-col span="12">
-              <a-button class="light-red">Перенести</a-button>
+              <a-button class="light-red" @click="onChangeDate"
+                >Перенести</a-button
+              >
             </a-col>
             <a-col span="12">
-              <a-button class="dark-red">Начать занятие</a-button>
+              <a-button class="dark-red" @click="start"
+                >Начать занятие</a-button
+              >
             </a-col>
           </a-row>
         </div>
@@ -65,22 +69,51 @@
         </div>
       </div>
     </div>
+    <datePicker v-if="changeDate" @close="closeChangeDate" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   name: "IndexPage",
   data() {
     return {
-      //
+      changeDate: false,
     };
   },
   mounted() {},
-  methods: {},
+  methods: {
+    async onChangeDate() {
+      try {
+        this.changeDate = true;
+      } catch ({ message }) {
+        throw new Error(message);
+      }
+    },
+    async start() {
+      try {
+        const { data } = await this.$axios.post(`/${this.client}/request`, {
+          code: "start",
+        });
+        const key = data.variables && data.variables.exercise;
+        const id =
+          data.variables &&
+          data.variables.currentProgram &&
+          data.variables.currentProgram[key] &&
+          data.variables.currentProgram[key].exercise_id;
+        this.$router.push(`/exercises/${id}`);
+      } catch ({ message }) {
+        throw new Error(message);
+      }
+    },
+    closeChangeDate() {
+      this.changeDate = false;
+    },
+  },
   computed: {
     ...mapGetters("home", ["getClient", "getVariables"]),
+    ...mapState(["client"]),
   },
 };
 </script>

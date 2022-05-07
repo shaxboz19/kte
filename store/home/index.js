@@ -13,8 +13,8 @@ export const mutations = {
 }
 
 export const actions = {
-    async getDetail({commit}, id) {  
-        const {data} = await this.$axios.get('https://m.bot-marketing.com/api/public/tunnelSessions/MAhQp1AD')
+    async getDetail({commit, state}, id) {  
+        const {data} = await this.$axios.get('/' + id)
         const {client} = data
         commit('setClient', client)
         commit('setVariables', data.variables)
@@ -27,6 +27,7 @@ export const getters = {
         return state.client
     },
     getVariables(state) {
+        console.log(state);
         return state.variables
     }
 }

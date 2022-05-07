@@ -8,7 +8,8 @@
         <slot name="body"></slot>
       </div>
       <div class="popup-footer" v-if="isFooter">
-        <a-button class="light-red"  @click="Close">Отмена</a-button>
+        <a-button class="light-red" @click="Close">Отмена</a-button>
+        <a-button class="red" @click="access" v-if="isAccess">Готово</a-button>
       </div>
     </div>
   </div>
@@ -32,7 +33,7 @@ export default {
     Height: {
       type: Number | String,
       default() {
-        return 'Auto';
+        return "Auto";
       },
     },
     isFooter: {
@@ -41,10 +42,19 @@ export default {
         return true;
       },
     },
+    isAccess: {
+      type: Boolean,
+      default() {
+        return false;
+      },
+    },
   },
   methods: {
     Close() {
       this.$emit("close");
+    },
+    access() {
+      this.$emit("access");
     },
   },
 };
@@ -57,7 +67,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0, 0.4);
+  background-color: rgba(0, 0, 0, 0.4);
   z-index: 9999;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -84,12 +94,11 @@ export default {
 }
 
 .popup-header h4 {
-font-weight: 600;
-font-size: 20px;
-line-height: 24px;
-text-align: center;
-color: #000000;
-
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  color: #000000;
 }
 
 .popup-header i {
@@ -102,7 +111,6 @@ color: #000000;
   max-width: calc(100% - 8px);
   overflow-y: scroll;
   height: 100%;
-
 }
 
 .popup-body::-webkit-scrollbar-track {
@@ -125,10 +133,24 @@ color: #000000;
 }
 
 .popup-footer {
+  display: flex;
   padding: 16px 24px 24px 24px;
   display: -webkit-box;
   display: -ms-flexbox;
 }
-
-
+.popup-footer button {
+  margin: 0 8px;
+}
+.red {
+  background-color: #ff685a;
+  color: #fff;
+}
+.red:hover {
+  background-color: #ff685a;
+  color: #fff;
+}
+.red:focus {
+  background-color: #ff685a;
+  color: #fff;
+}
 </style>

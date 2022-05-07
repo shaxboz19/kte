@@ -1,9 +1,15 @@
 <template>
   <div class="employment-detail">
     <div class="employment-detail-video" v-if="getExercise">
-      <i class="icon-play"></i>
-      <!-- <img src="@/static/images/poster.jpg" alt="poster" /> -->
-      <div id="yandex-player"></div>
+      <iframe
+        width="100%"
+        height="100%"
+        src="https://www.youtube.com/embed/v8AMzf2WBYY"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
     </div>
     <div class="container">
       <div class="employment-detail-wrapper">
@@ -51,23 +57,26 @@
               <a-button class="dark-red" @click="toStart">Приступить</a-button>
             </a-col>
             <a-col span="12">
-              <a-button class="light-red">Завершить</a-button>
+              <a-button class="light-red" @click="stop">Завершить</a-button>
             </a-col>
             <a-col span="12">
-              <a-button class="light-red">Пропустить</a-button>
+              <a-button class="light-red" @click="skip">Пропустить</a-button>
             </a-col>
           </a-row>
         </div>
       </div>
     </div>
+    <PopupReason v-if="isPopup" @close="closePopup" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      isPopup: false,
+    };
   },
   mounted() {
     // setTimeout(() => {
@@ -77,17 +86,45 @@ export default {
     // }, 500);
   },
   methods: {
-    toStart() {
-      this.$router.push({
-        name: "execute",
-        query: {
-          id: this.$route.params.id,
-        },
-      });
+    async toStart() {
+      try {
+        const { data } = await this.$axios.post(`/${this.client}/request`, {
+          code: "start",
+        });
+        this.$router.push({
+          name: "execute",
+          query: {
+            id: this.$route.params.id,
+          },
+        });
+      } catch ({ message }) {
+        throw new Error(message);
+      }
+    },
+    async stop() {
+      try {
+        this.isPopup = true;
+      } catch ({ message }) {
+        throw new Error(message);
+      }
+    },
+    async skip() {
+      try {
+        const { data } = await this.$axios.post(`/${this.client}/request`, {
+          code: "skip",
+        });
+        console.log(data);
+      } catch ({ message }) {
+        throw new Error(message);
+      }
+    },
+    closePopup() {
+      this.isPopup = false;
     },
   },
   computed: {
     ...mapGetters("home", ["getVariables"]),
+    ...mapState(["client"]),
     getExercise() {
       return (
         this.getVariables &&

@@ -14,14 +14,18 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   mounted() {
     this.getDetail();
   },
   methods: {
     async getDetail() {
-      await this.$store.dispatch("home/getDetail");
+      await this.$store.dispatch("home/getDetail", this.client);
     },
+  },
+  computed: {
+    ...mapState(["client"]),
   },
 };
 </script>
