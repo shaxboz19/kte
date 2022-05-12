@@ -10,6 +10,8 @@ export default {
         this.$router.push(`/execute?id=${id}`)
       } else if (pathName === '') {
         this.$router.push('/')
+      } else if(pathName === 'Результат') {
+        this.$router.push('/result')
       }
     }
   }

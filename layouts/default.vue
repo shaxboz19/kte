@@ -21,9 +21,9 @@
 import { mapState } from "vuex";
 export default {
   mounted() {
-    if (this.$route.query.id) {
-      this.$store.commit("setClient", this.$route.query.id);
-      localStorage.setItem("client", this.$route.query.id);
+    if (this.$route.query.client) {
+      this.$store.commit("setClient", this.$route.query.client);
+      localStorage.setItem("client", this.$route.query.client);
     }
     this.getDetail();
     if (!localStorage.getItem("client")) {

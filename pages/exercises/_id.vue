@@ -150,4 +150,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.employment-detail-footer{
+  position: fixed;
+  bottom: 0;
+  width: 535px;
+  background-color: #fff;
+  padding-bottom: 8px;
+  }
+  .employment-detail-content{
+    padding-bottom: 110px;
+  }
+</style>

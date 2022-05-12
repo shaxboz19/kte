@@ -30,10 +30,18 @@
         </a-col>
 
         <a-col span="24">
-          <a-button class="dark-red" @click="done"> Готово </a-button>
+          <a-button
+            class="dark-red"
+            @click="done"
+            :disabled="!isFinish"
+            :class="{ disabled: !isFinish }"
+          >
+            Готово
+          </a-button>
         </a-col>
       </a-row>
     </div>
+    <PopupReason v-if="isPopup" @close="closePopup" />
   </div>
 </template>
 
@@ -47,6 +55,7 @@ export default {
       restSeconds: 10,
       timer: null,
       approach: 1,
+      isPopup: false,
     };
   },
   mounted() {
@@ -62,12 +71,13 @@ export default {
   methods: {
     async stop() {
       try {
-        const { data } = await this.$axios.post(`/${this.client}/request`, {
-          code: "skip",
-        });
-        console.log(data);
-      } catch ({ message }) {
-        throw new Error(message);
+        this.isPopup = true;
+        clearInterval(this.timer);
+      } catch (error) {
+        const {
+          data: { message },
+        } = error.response;
+        this.errorHandler(message);
       }
     },
     async notAble() {
@@ -75,9 +85,15 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "not_able",
         });
-        console.log(data);
-      } catch ({ message }) {
-        throw new Error(message);
+        const { title } = data.currentNode;
+        this.isFinish = true;
+        clearInterval(this.timer);
+        this.smartRouter(title);
+      } catch (error) {
+        const {
+          data: { message },
+        } = error.response;
+        this.errorHandler(message);
       }
     },
     async done() {
@@ -86,11 +102,51 @@ export default {
           code: "done",
         });
         this.$store.commit("home/setVariables", data.variables);
-        this.$router.push({
-          name: "result",
-        });
-      } catch ({ message }) {
-        throw new Error(message);
+        const { title } = data.currentNode;
+        if (this.approach < this.getProgram.approach) {
+          this.approach++;
+          this.isFinish = false;
+          this.actionSeconds = 10;
+          this.timer = setInterval(() => {
+            if (this.actionSeconds > 0) {
+              this.actionSeconds--;
+            } else {
+              this.isFinish = true;
+              clearInterval(this.timer);
+              this.restSeconds = 10;
+            }
+          }, 1000);
+        } else {
+          this.isFinish = true;
+          clearInterval(this.timer);
+          this.smartRouter(title);
+        }
+      } catch (error) {
+        const {
+          data: { message },
+        } = error.response;
+        this.errorHandler(message);
+      }
+    },
+    closePopup() {
+      this.isPopup = false;
+      if (!this.isFinish) {
+        this.timer = setInterval(() => {
+          if (this.actionSeconds > 0) {
+            this.actionSeconds--;
+          } else {
+            this.isFinish = true;
+            clearInterval(this.timer);
+          }
+        }, 1000);
+      } else {
+        this.timer = setInterval(() => {
+          if (this.restSeconds > 0) {
+            this.restSeconds--;
+          } else {
+            clearInterval(this.timer);
+          }
+        }, 1000);
       }
     },
   },
@@ -115,41 +171,23 @@ export default {
   },
   watch: {
     isFinish(val) {
-      if (this.approach <= this.getProgram.approach) {
-        if (val && this.approach < this.getProgram.approach) {
-          this.timer = setInterval(() => {
-            if (this.restSeconds > 0) {
-              this.restSeconds--;
-            } else if (
-              this.restSeconds == 0 &&
-              this.approach < this.getProgram.approach
-            ) {
-              this.isFinish = false;
-              clearInterval(this.timer);
-              this.actionSeconds = 10;
-              this.approach++;
-            }
-          }, 1000);
-        } else {
-          this.timer = setInterval(() => {
-            if (this.actionSeconds > 0) {
-              this.actionSeconds--;
-            } else {
-              this.isFinish = true;
-              clearInterval(this.timer);
-              this.restSeconds = 10;
-              if (this.approach == this.getProgram.approach) {
-                this.approach++;
-              }
-            }
-          }, 1000);
-        }
-      } else {
-        this.$router.push("/result");
+      if (val) {
+        this.timer = setInterval(() => {
+          if (this.restSeconds > 0) {
+            this.restSeconds--;
+          } else {
+            clearInterval(this.timer);
+          }
+        }, 1000);
       }
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+button.disabled {
+  background-color: #f5f5f5 !important;
+  color: rgba(0, 0, 0, 0.25) !important;
+}
+</style>

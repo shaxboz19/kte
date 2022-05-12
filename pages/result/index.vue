@@ -46,9 +46,13 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "OK",
         });
-        console.log(data);
-      } catch ({ message }) {
-        throw new Error(message);
+        const { title } = data.currentNode;
+        this.smartRouter(title);
+      } catch (error) {
+        const {
+          data: { message },
+        } = error.response;
+        this.errorHandler(message);
       }
     },
   },
