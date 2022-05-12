@@ -12,6 +12,8 @@ export default {
         this.$router.push('/')
       } else if(pathName === 'Результат') {
         this.$router.push('/result')
+      } else if (pathName === 'Не смог сделать') {
+        this.$router.push('/exercises/' + id)
       }
     }
   }

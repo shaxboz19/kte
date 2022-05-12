@@ -88,7 +88,7 @@ export default {
         const { title } = data.currentNode;
         this.isFinish = true;
         clearInterval(this.timer);
-        this.smartRouter(title);
+        this.smartRouter(title, 2);
       } catch (error) {
         const {
           data: { message },
