@@ -17,6 +17,7 @@
 import { mapState } from "vuex";
 export default {
   mounted() {
+    this.$store.commit('setClient', this.$route.query.id)
     this.getDetail();
   },
   methods: {
