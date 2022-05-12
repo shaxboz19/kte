@@ -8,20 +8,31 @@ export default {
     htmlAttrs: {
       lang: 'en'
     },
-    script: [
-        {
-          src: "https://yastatic.net/vh-player/loader.js",
-        },
-      ],
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' }
+    script: [{
+      src: "https://yastatic.net/vh-player/loader.js",
+    }, ],
+    meta: [{
+        charset: 'utf-8'
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: ''
+      },
+      {
+        name: 'format-detection',
+        content: 'telephone=no'
+      }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: '/favicon.ico'
+    }]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -36,7 +47,15 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/antd-ui',
-    '@/plugins/VueScroll.js'
+    '@/plugins/VueScroll.js',
+    {
+      src: "@/plugins/error.js",
+      mode: "client"
+    },
+    {
+      src: "@/plugins/smartRouter.js",
+      mode: "client"
+    }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -49,14 +68,18 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/toast',
   ],
   axios: {
     baseURL: 'https://m.bot-marketing.com/api/public/tunnelSessions',
   },
-  
+  toast: {
+    position: 'top-center',
+    duration: 3000,
+  },
+
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  }
+  build: {}
 }

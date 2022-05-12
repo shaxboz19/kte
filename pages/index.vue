@@ -96,15 +96,20 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "start",
         });
+        const { title } = data.currentNode;
+        console.log(title);
         const key = data.variables && data.variables.exercise;
         const id =
           data.variables &&
           data.variables.currentProgram &&
           data.variables.currentProgram[key] &&
           data.variables.currentProgram[key].exercise_id;
-        this.$router.push(`/exercises/${id}`);
-      } catch ({ message }) {
-        throw new Error(message);
+        this.smartRouter(title, id);
+      } catch (error) {
+        const {
+          data: { message },
+        } = error.response;
+        this.errorHandler(message);
       }
     },
     closeChangeDate() {

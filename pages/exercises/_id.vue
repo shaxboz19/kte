@@ -91,21 +91,23 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "start",
         });
-        this.$router.push({
-          name: "execute",
-          query: {
-            id: this.$route.params.id,
-          },
-        });
-      } catch ({ message }) {
-        throw new Error(message);
+        const { title } = data.currentNode;
+        this.smartRouter(title, this.$route.params.id);
+      } catch (error) {
+        const {
+          data: { message },
+        } = error.response;
+        this.errorHandler(message);
       }
     },
     async stop() {
       try {
         this.isPopup = true;
-      } catch ({ message }) {
-        throw new Error(message);
+      } catch (error) {
+        const {
+          data: { message },
+        } = error.response;
+        this.errorHandler(message);
       }
     },
     async skip() {
@@ -113,9 +115,13 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "skip",
         });
-        console.log(data);
-      } catch ({ message }) {
-        throw new Error(message);
+        const { title } = data.currentNode;
+        this.smartRouter(title, this.$route.params.id);
+      } catch (error) {
+        const {
+          data: { message },
+        } = error.response;
+        this.errorHandler(message);
       }
     },
     closePopup() {

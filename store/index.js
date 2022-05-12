@@ -1,8 +1,12 @@
 export const state = () => ({
-    client : "g4hoEqNA"
+  client: localStorage.getItem('client'),
+  isError: false
 })
 export const mutations = {
-    setClient(state, client) {
-        state.client = client
-    }
+  setClient(state, client) {
+    state.client = client
+  },
+  setError(state, error) {
+    state.isError = error
+  }
 }

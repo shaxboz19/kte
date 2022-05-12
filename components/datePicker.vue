@@ -168,10 +168,18 @@ export default {
         this.minute
       );
       date = this.$moment(date).format("YYYY-MM-DD HH:mm");
-      await this.$axios.post(`/${this.client}/request`, {
-        code: "change_date",
-        date: date,
-      });
+      try {
+        await this.$axios.post(`/${this.client}/request`, {
+          code: "change_date",
+          date: date,
+        });
+        this.$emit("close");
+      } catch (e) {
+        const {
+          data: { message },
+        } = e.response;
+        this.errorHandler(message);
+      }
     },
   },
 };

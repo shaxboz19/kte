@@ -46,13 +46,18 @@ export default {
     },
     async onClick(reason) {
       try {
-        await this.$axios.post(`/${this.client}/request`, {
+        const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "stop",
           reason,
         });
+        const { title } = data.currentNode;
         this.$emit("close");
-      } catch ({ message }) {
-        throw new Error(message);
+        this.smartRouter(title);
+      } catch (error) {
+        const {
+          data: { message },
+        } = error.response;
+        this.errorHandler(message);
       }
     },
     onClickOther() {
@@ -63,13 +68,18 @@ export default {
     },
     async access() {
       try {
-        await this.$axios.post(`/${this.client}/request`, {
+        const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "stop",
           reason: this.$refs.textarea.value,
         });
+        const { title } = data.currentNode;
         this.$emit("close");
-      } catch ({ message }) {
-        throw new Error(message);
+        this.smartRouter(title);
+      } catch (error) {
+        const {
+          data: { message },
+        } = error.response;
+        this.errorHandler(message);
       }
     },
   },

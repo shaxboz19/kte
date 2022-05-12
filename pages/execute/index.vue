@@ -4,7 +4,9 @@
     <div class="exercise">
       <ul>
         <li :class="{ active: !isFinish }">
-          <span class="exercise-title">Подход {{approach}}/{{getProgram.approach}}</span>
+          <span class="exercise-title"
+            >Подход {{ approach }}/{{ getProgram.approach }}</span
+          >
           <span class="exercise-count">{{ actionSeconds }}</span>
           <span class="exercise-time">секунд</span>
         </li>
@@ -44,7 +46,7 @@ export default {
       actionSeconds: 10,
       restSeconds: 10,
       timer: null,
-      approach: 1
+      approach: 1,
     };
   },
   mounted() {
@@ -113,36 +115,38 @@ export default {
   },
   watch: {
     isFinish(val) {
-      if(this.approach <= this.getProgram.approach) {
-      if (val && this.approach < this.getProgram.approach) {
-        this.timer = setInterval(() => {
-          if (this.restSeconds > 0) {
-            this.restSeconds--;
-          } else if(this.restSeconds == 0 && this.approach < this.getProgram.approach) {
-            this.isFinish = false;
-            clearInterval(this.timer);
-            this.actionSeconds = 10;
-            this.approach++
-          } 
-        }, 1000);
-      } else {
-        this.timer = setInterval(() => {
-          if (this.actionSeconds > 0) {
-            this.actionSeconds--;
-          } else {
-            this.isFinish = true;
-            clearInterval(this.timer);
-            this.restSeconds = 10;
-            if(this.approach == this.getProgram.approach) {
-              this.approach++
+      if (this.approach <= this.getProgram.approach) {
+        if (val && this.approach < this.getProgram.approach) {
+          this.timer = setInterval(() => {
+            if (this.restSeconds > 0) {
+              this.restSeconds--;
+            } else if (
+              this.restSeconds == 0 &&
+              this.approach < this.getProgram.approach
+            ) {
+              this.isFinish = false;
+              clearInterval(this.timer);
+              this.actionSeconds = 10;
+              this.approach++;
             }
-          }
-        }, 1000);
-      }
+          }, 1000);
+        } else {
+          this.timer = setInterval(() => {
+            if (this.actionSeconds > 0) {
+              this.actionSeconds--;
+            } else {
+              this.isFinish = true;
+              clearInterval(this.timer);
+              this.restSeconds = 10;
+              if (this.approach == this.getProgram.approach) {
+                this.approach++;
+              }
+            }
+          }, 1000);
+        }
       } else {
-        this.$router.push('/result')
+        this.$router.push("/result");
       }
-    
     },
   },
 };
