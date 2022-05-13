@@ -9,19 +9,28 @@
       <div class="container">
         <div class="home-wrapper">
           <h2 class="title">
-            Здравствуйте, {{ getVariables && getVariables.name }}!
+            Здравствуйте, {{ getClient && getClient.name }}!
           </h2>
           <a-row :gutter="[8, 16]">
             <a-col span="12">
               <div class="home-card">
                 <h4>Занятий пройдено</h4>
-                <span class="home-card-blue">5 <span>/10</span></span>
+                <span class="home-card-blue">
+                  {{ (getVariables && getVariables.lesson) || 0 }}
+                  <span
+                    >/{{
+                      (getVariables && getVariables.countLesson) || 0
+                    }}</span
+                  ></span
+                >
               </div>
             </a-col>
             <a-col span="12">
               <div class="home-card">
                 <h4>Следующее занятие</h4>
-                <span class="home-card-red">Сейчас</span>
+                <span class="home-card-red">{{
+                  (getVariables && getVariables.timeNextLesson) || "Сейчас"
+                }}</span>
               </div>
             </a-col>
             <a-col span="12">

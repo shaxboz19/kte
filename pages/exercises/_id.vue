@@ -4,7 +4,7 @@
       <iframe
         width="100%"
         height="100%"
-        src="https://www.youtube.com/embed/v8AMzf2WBYY"
+        :src="'https://www.youtube.com/embed/' + getUrlId"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -116,7 +116,8 @@ export default {
           code: "skip",
         });
         const { title } = data.currentNode;
-        this.smartRouter(title, this.$route.params.id);
+        const { exerciseId } = data.variables;
+        this.smartRouter(title, exerciseId);
       } catch (error) {
         const {
           data: { message },
@@ -146,19 +147,22 @@ export default {
         this.getVariables.currentProgram[this.getExercise.exercise]
       );
     },
+    getUrlId() {
+      return this.getExercise && this.getExercise.link.split("/").pop();
+    },
   },
 };
 </script>
 
 <style>
-.employment-detail-footer{
+.employment-detail-footer {
   position: fixed;
   bottom: 0;
   width: 535px;
   background-color: #fff;
   padding-bottom: 8px;
-  }
-  .employment-detail-content{
-    padding-bottom: 110px;
-  }
+}
+.employment-detail-content {
+  padding-bottom: 110px;
+}
 </style>

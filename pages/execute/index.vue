@@ -24,7 +24,7 @@
           <a-button class="light-red" @click="stop"> Завершить </a-button>
         </a-col>
         <a-col span="12">
-          <a-button class="light-red" @click="notAble">
+          <a-button class="light-red" @click="notAble" :disabled="isFinish">
             Не смог сделать
           </a-button>
         </a-col>
@@ -33,8 +33,8 @@
           <a-button
             class="dark-red"
             @click="done"
-            :disabled="!isFinish"
-            :class="{ disabled: !isFinish }"
+            :disabled="!isFinish || restSeconds != 0"
+            :class="{ disabled: !isFinish || restSeconds != 0 }"
           >
             Готово
           </a-button>
@@ -54,7 +54,7 @@ export default {
       actionSeconds: 10,
       restSeconds: 10,
       timer: null,
-      approach: 1,
+      approach: localStorage.getItem("approach") || 1,
       isPopup: false,
     };
   },
@@ -85,10 +85,14 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "not_able",
         });
+        const { exerciseId } = data.variables;
         const { title } = data.currentNode;
-        this.isFinish = true;
-        clearInterval(this.timer);
-        this.smartRouter(title, 2);
+        this.isFinish = false;
+        // clearInterval(this.timer);
+        this.smartRouter(title, exerciseId);
+        this.actionSeconds = 10;
+        this.restSeconds = 10;
+        this.approach = data.variables && data.variables.approachNumber;
       } catch (error) {
         const {
           data: { message },
@@ -101,10 +105,12 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "done",
         });
+        const { exerciseId } = data.variables;
         this.$store.commit("home/setVariables", data.variables);
         const { title } = data.currentNode;
         if (this.approach < this.getProgram.approach) {
           this.approach++;
+          localStorage.setItem("approach", this.approach);
           this.isFinish = false;
           this.actionSeconds = 10;
           this.timer = setInterval(() => {
@@ -119,7 +125,8 @@ export default {
         } else {
           this.isFinish = true;
           clearInterval(this.timer);
-          this.smartRouter(title);
+          localStorage.removeItem("approach");
+          this.smartRouter(title, exerciseId);
         }
       } catch (error) {
         const {
