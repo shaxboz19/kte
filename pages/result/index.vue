@@ -43,11 +43,7 @@ export default {
   methods: {
     async done() {
       try {
-        const { data } = await this.$axios.post(`/${this.client}/request`, {
-          code: "OK",
-        });
-        const { title } = data.currentNode;
-        this.smartRouter(title);
+        this.$router.push("/");
       } catch (error) {
         const {
           data: { message },

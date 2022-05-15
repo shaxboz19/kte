@@ -9,12 +9,12 @@
       <div class="pages-action" style="margin-bottom: 24px">
         <a-row :gutter="[8, 8]" v-if="isActive">
           <a-col span="24">
-            <a-button class="light-blue" @click="onClick('Почувствовал боль')">
+            <a-button class="light-blue" @click="onClick('pain')">
               Почувствовал боль
             </a-button>
           </a-col>
           <a-col span="24">
-            <a-button class="light-blue" @click="onClick('Устал')">
+            <a-button class="light-blue" @click="onClick('tired')">
               Устал
             </a-button>
           </a-col>

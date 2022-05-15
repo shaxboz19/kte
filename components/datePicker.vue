@@ -167,7 +167,7 @@ export default {
         this.hour,
         this.minute
       );
-      date = this.$moment(date).format("YYYY-MM-DD HH:mm");
+      date = this.$moment(date).format();
       try {
         await this.$axios.post(`/${this.client}/request`, {
           code: "change_date",
