@@ -48,7 +48,9 @@ export default {
       try {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "stop",
-          reason,
+          params: {
+            reason,
+          },
         });
         const { title } = data.currentNode;
         this.$emit("close");

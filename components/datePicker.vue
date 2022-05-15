@@ -171,7 +171,9 @@ export default {
       try {
         await this.$axios.post(`/${this.client}/request`, {
           code: "change_date",
-          date: date,
+          params: {
+            date: date,
+          },
         });
         this.$emit("close");
       } catch (e) {
