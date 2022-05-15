@@ -167,14 +167,15 @@ export default {
         this.hour,
         this.minute
       );
-      date = this.$moment(date).format();
+      date = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
       try {
-        await this.$axios.post(`/${this.client}/request`, {
+        const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "change_date",
           params: {
             date: date,
           },
         });
+        this.$store.commit("home/setVariables", data.variables);
         this.$emit("close");
       } catch (e) {
         const {
