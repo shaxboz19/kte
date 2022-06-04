@@ -36,7 +36,6 @@ export default {
     if (!this.getVariables) {
       this.loading = true;
       const data = await this.$store.dispatch("home/getDetail", this.client);
-      console.log(this.getVariables);
     }
     this.loading = false;
   },

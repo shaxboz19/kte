@@ -43,7 +43,6 @@ export const getters = {
     return state.client
   },
   getVariables(state) {
-    console.log(state);
     return state.variables
   }
 }

@@ -18,9 +18,12 @@
 </template>
 
 <script>
+import NoSleep from "nosleep.js";
 import { mapState } from "vuex";
 export default {
   mounted() {
+    let noSleep = new NoSleep();
+    noSleep.enable();
     if (this.$route.query.client) {
       this.$store.commit("setClient", this.$route.query.client);
       localStorage.setItem("client", this.$route.query.client);

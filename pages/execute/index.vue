@@ -41,6 +41,7 @@
         </a-col>
       </a-row>
     </div>
+    <!-- <audio ref="audio" preload="auto" controls src="/audio/2.wav"></audio> -->
     <PopupReason v-if="isPopup" @close="closePopup" />
   </div>
 </template>
@@ -56,6 +57,9 @@ export default {
       timer: null,
       approach: localStorage.getItem("approach") || 1,
       isPopup: false,
+      audio: new Audio("/audio/2.wav"),
+      isTwoScreens: false
+      
     };
   },
   mounted() {
@@ -188,6 +192,28 @@ export default {
         }, 1000);
       }
     },
+    restSeconds(val) {
+      if (val < 6) {
+        this.audio.play();
+      } else if (val === 0) {
+        this.audio.pause();
+        this.audio.currentTime = 0;
+      }
+    },
+    actionSeconds(val) {
+      if (val < 6) {
+        console.dir(this.audio);
+        this.audio.play();
+      } else if (val === 0) {
+        this.audio.pause();
+        this.audio.currentTime = 0;
+      }
+    },
+    getProgram(val) {
+      if(val.right) {
+        this.isTwoScreens = true;
+      }
+    }
   },
 };
 </script>
@@ -196,5 +222,8 @@ export default {
 button.disabled {
   background-color: #f5f5f5 !important;
   color: rgba(0, 0, 0, 0.25) !important;
+}
+.hidden {
+  display: none;
 }
 </style>
