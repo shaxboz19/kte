@@ -15,7 +15,6 @@ export default {
       popup: true,
     };
   },
-  methods: {},
 };
 </script>
 
