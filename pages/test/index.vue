@@ -8,6 +8,7 @@
 
 <script>
 export default {
+  // test page
   components: {},
   data() {
     return {
@@ -18,5 +19,4 @@ export default {
 };
 </script>
 
-<style >
-</style>
+<style></style>
