@@ -8,7 +8,9 @@
             >Подход {{ approach }}/{{ getProgram.approach }}</span
           >
           <span class="exercise-count">{{ actionSeconds }}</span>
-          <span class="exercise-time">секунд</span>
+          <span class="exercise-time">{{
+            getProgram.option === "сек" ? "секунд" : "повторений"
+          }}</span>
         </li>
 
         <li :class="{ active: isFinish }">
@@ -30,11 +32,15 @@
         </a-col>
 
         <a-col span="24">
+          <a-button class="dark-red" @click="toRelax" v-if="!isRelax">
+            Отдых
+          </a-button>
           <a-button
             class="dark-red"
             @click="done"
             :disabled="!isFinish || restSeconds != 0"
             :class="{ disabled: !isFinish || restSeconds != 0 }"
+            v-else
           >
             Готово
           </a-button>
@@ -58,19 +64,31 @@ export default {
       approach: localStorage.getItem("approach") || 1,
       isPopup: false,
       audio: new Audio("/audio/2.wav"),
-      isTwoScreens: false
-      
+      isTwoScreens: false,
+      isLeft: true,
+      isRelax: true,
     };
   },
   mounted() {
-    this.timer = setInterval(() => {
-      if (this.actionSeconds > 0) {
-        this.actionSeconds--;
+    setTimeout(() => {
+      if (this.getProgram && this.getProgram.option === "сек") {
+        this.actionSeconds = this.getProgram.left;
+        this.timer = setInterval(() => {
+          if (this.actionSeconds > 0) {
+            this.actionSeconds--;
+          } else {
+            this.isFinish = true;
+            clearInterval(this.timer);
+          }
+        }, 1000);
       } else {
-        this.isFinish = true;
-        clearInterval(this.timer);
+        this.isRelax = false;
+        this.actionSeconds = this.getProgram.left;
       }
-    }, 1000);
+      console.log(this.getVariables);
+    }, 200);
+    // this.approach = this.getVariables && this.getVariables.approachNumber;
+    // localStorage.setItem("approach", this.approach);
   },
   methods: {
     async stop() {
@@ -105,6 +123,9 @@ export default {
       }
     },
     async done() {
+      if (this.getProgram.right) {
+        this.isLeft = !this.isLeft;
+      }
       try {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "done",
@@ -112,20 +133,37 @@ export default {
         const { exerciseId } = data.variables;
         this.$store.commit("home/setVariables", data.variables);
         const { title } = data.currentNode;
-        if (this.approach < this.getProgram.approach) {
-          this.approach++;
+        if (
+          this.approach < this.getProgram.approach ||
+          this.getVariables.approachNumber === 3
+        ) {
+          this.approach = this.getVariables.approachNumber;
           localStorage.setItem("approach", this.approach);
           this.isFinish = false;
-          this.actionSeconds = 10;
-          this.timer = setInterval(() => {
-            if (this.actionSeconds > 0) {
-              this.actionSeconds--;
+          if (this.getProgram.option === "сек") {
+            if (this.isLeft) {
+              this.actionSeconds = this.getProgram.left;
             } else {
-              this.isFinish = true;
-              clearInterval(this.timer);
-              this.restSeconds = 10;
+              this.actionSeconds = this.getProgram.right;
             }
-          }, 1000);
+
+            this.timer = setInterval(() => {
+              if (this.actionSeconds > 0) {
+                this.actionSeconds--;
+              } else {
+                this.isFinish = true;
+                clearInterval(this.timer);
+                this.restSeconds = 10;
+              }
+            }, 1000);
+          } else {
+            this.isRelax = false;
+            if (this.isLeft) {
+              this.actionSeconds = this.getProgram.left;
+            } else {
+              this.actionSeconds = this.getProgram.right;
+            }
+          }
         } else {
           this.isFinish = true;
           clearInterval(this.timer);
@@ -159,6 +197,12 @@ export default {
           }
         }, 1000);
       }
+    },
+    toRelax() {
+      this.isRelax = true;
+      this.isFinish = true;
+      clearInterval(this.timer);
+      this.restSeconds = 10;
     },
   },
   computed: {
@@ -210,10 +254,10 @@ export default {
       }
     },
     getProgram(val) {
-      if(val.right) {
+      if (val.right) {
         this.isTwoScreens = true;
       }
-    }
+    },
   },
 };
 </script>

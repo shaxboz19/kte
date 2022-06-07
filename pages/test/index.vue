@@ -8,15 +8,14 @@
 
 <script>
 export default {
+  // test page
   components: {},
   data() {
     return {
       popup: true,
     };
   },
-  methods: {},
 };
 </script>
 
-<style >
-</style>
+<style></style>
