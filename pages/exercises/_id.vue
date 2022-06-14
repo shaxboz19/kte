@@ -91,6 +91,7 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "start",
         });
+        this.$store.commit("home/setVariables", data.variables);
         const { title } = data.currentNode;
         this.smartRouter(title, this.$route.params.id);
       } catch (error) {

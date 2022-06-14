@@ -5,7 +5,8 @@
       <ul>
         <li :class="{ active: !isFinish }">
           <span class="exercise-title"
-            >Подход {{ approach }}/{{ getProgram.approach }}</span
+            >Подход {{ approach }}/{{ getProgram.approach }} <br />
+            <b v-if="getProgram.right">({{ getVariables.side }})</b></span
           >
           <span class="exercise-count">{{ actionSeconds }}</span>
           <span class="exercise-time">{{
@@ -19,6 +20,12 @@
           <span class="exercise-time">секунд</span>
         </li>
       </ul>
+      <p class="text">
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Libero soluta
+        dolores similique temporibus omnis dolore distinctio reprehenderit
+        aliquam, eaque nostrum voluptate suscipit voluptatum, dignissimos totam
+        et molestias? Expedita, necessitatibus dolorum.
+      </p>
     </div>
     <div class="pages-action">
       <a-row :gutter="[8, 8]">
@@ -70,9 +77,20 @@ export default {
     };
   },
   mounted() {
+    if (localStorage.getItem("approach") == "undefined") {
+      localStorage.setItem("approach", 1);
+      this.approach = 1;
+    }
     setTimeout(() => {
       if (this.getProgram && this.getProgram.option === "сек") {
-        this.actionSeconds = this.getProgram.left;
+        if (
+          this.getVariables.side &&
+          this.getVariables.side == "Правая строна"
+        ) {
+          this.actionSeconds = this.getProgram.right;
+        } else {
+          this.actionSeconds = this.getProgram.left;
+        }
         this.timer = setInterval(() => {
           if (this.actionSeconds > 0) {
             this.actionSeconds--;
@@ -83,10 +101,17 @@ export default {
         }, 1000);
       } else {
         this.isRelax = false;
-        this.actionSeconds = this.getProgram.left;
+        if (
+          this.getVariables.side &&
+          this.getVariables.side == "Правая строна"
+        ) {
+          this.actionSeconds = this.getProgram.right;
+        } else {
+          this.actionSeconds = this.getProgram.left;
+        }
       }
       console.log(this.getVariables);
-    }, 200);
+    }, 300);
     // this.approach = this.getVariables && this.getVariables.approachNumber;
     // localStorage.setItem("approach", this.approach);
   },
@@ -103,18 +128,41 @@ export default {
       }
     },
     async notAble() {
+      if (this.getProgram.right) {
+        this.isLeft = !this.isLeft;
+      }
       try {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "not_able",
         });
         const { exerciseId } = data.variables;
+        this.$store.commit("home/setVariables", data.variables);
         const { title } = data.currentNode;
         this.isFinish = false;
         // clearInterval(this.timer);
         this.smartRouter(title, exerciseId);
-        this.actionSeconds = 10;
-        this.restSeconds = 10;
+        if (this.getProgram.option === "сек") {
+          if (
+            this.getVariables.side &&
+            this.getVariables.side == "Правая строна"
+          ) {
+            this.actionSeconds = this.getProgram.right;
+          } else {
+            this.actionSeconds = this.getProgram.left;
+          }
+        } else {
+          this.isRelax = false;
+          if (
+            this.getVariables.side &&
+            this.getVariables.side == "Правая строна"
+          ) {
+            this.actionSeconds = this.getProgram.right;
+          } else {
+            this.actionSeconds = this.getProgram.left;
+          }
+        }
         this.approach = data.variables && data.variables.approachNumber;
+        localStorage.setItem("approach", this.approach);
       } catch (error) {
         const {
           data: { message },
@@ -141,10 +189,13 @@ export default {
           localStorage.setItem("approach", this.approach);
           this.isFinish = false;
           if (this.getProgram.option === "сек") {
-            if (this.isLeft) {
-              this.actionSeconds = this.getProgram.left;
-            } else {
+            if (
+              this.getVariables.side &&
+              this.getVariables.side == "Правая строна"
+            ) {
               this.actionSeconds = this.getProgram.right;
+            } else {
+              this.actionSeconds = this.getProgram.left;
             }
 
             this.timer = setInterval(() => {
@@ -158,10 +209,13 @@ export default {
             }, 1000);
           } else {
             this.isRelax = false;
-            if (this.isLeft) {
-              this.actionSeconds = this.getProgram.left;
-            } else {
+            if (
+              this.getVariables.side &&
+              this.getVariables.side == "Правая строна"
+            ) {
               this.actionSeconds = this.getProgram.right;
+            } else {
+              this.actionSeconds = this.getProgram.left;
             }
           }
         } else {
@@ -246,8 +300,7 @@ export default {
     },
     actionSeconds(val) {
       if (val < 6) {
-        console.dir(this.audio);
-        this.audio.play();
+        this.getProgram.option === "сек" && this.audio.play();
       } else if (val === 0) {
         this.audio.pause();
         this.audio.currentTime = 0;
@@ -269,5 +322,9 @@ button.disabled {
 }
 .hidden {
   display: none;
+}
+.text {
+  padding-top: 16px;
+  font-size: 18px;
 }
 </style>

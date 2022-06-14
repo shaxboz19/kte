@@ -16,6 +16,8 @@ export default {
         this.$router.push('/exercises/' + id)
       } else if (pathName === 'Причина') {
         this.$router.push('/')
+      } else if (pathName === "Следующее занятие") {
+        this.$router.push('/')
       }
     }
   }
