@@ -77,6 +77,8 @@ export default {
     };
   },
   mounted() {
+    setTimeout(() => {
+    }, 1000)
     if (localStorage.getItem("approach") == "undefined") {
       localStorage.setItem("approach", 1);
       this.approach = 1;
@@ -107,11 +109,11 @@ export default {
         ) {
           this.actionSeconds = this.getProgram.right;
         } else {
+          console.log(this.getProgram);
           this.actionSeconds = this.getProgram.left;
         }
       }
-      console.log(this.getVariables);
-    }, 300);
+    }, 1000);
     // this.approach = this.getVariables && this.getVariables.approachNumber;
     // localStorage.setItem("approach", this.approach);
   },
@@ -271,11 +273,7 @@ export default {
       );
     },
     getProgram() {
-      return (
-        this.getVariables &&
-        this.getExercise &&
-        this.getVariables.currentProgram[this.getExercise.exercise]
-      );
+      return this.getVariables && this.getVariables.exercise
     },
   },
   watch: {
@@ -306,11 +304,11 @@ export default {
         this.audio.currentTime = 0;
       }
     },
-    getProgram(val) {
-      if (val.right) {
-        this.isTwoScreens = true;
-      }
-    },
+    // getProgram(val) {
+    //   if (val.right) {
+    //     this.isTwoScreens = true;
+    //   }
+    // },
   },
 };
 </script>

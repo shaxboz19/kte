@@ -32,10 +32,11 @@ export default {
     if (!localStorage.getItem("client")) {
       this.$store.commit("setError", true);
     }
+    
   },
   methods: {
     async getDetail() {
-      const { variables } = await this.$store.dispatch(
+      const { variables, currentNode } = await this.$store.dispatch(
         "home/getDetail",
         this.client
       );
@@ -43,6 +44,10 @@ export default {
       if (!variables) {
         this.$store.commit("setError", true);
       }
+      const { title } = currentNode;
+      const id = variables && variables.exercise && variables.exercise.exercise_id
+      this.$store.commit('home/setVariables', variables)
+      id ? this.smartRouter(title, id) : this.smartRouter(title)
     },
   },
   computed: {

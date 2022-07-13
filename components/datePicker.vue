@@ -95,8 +95,9 @@ export default {
         "59",
       ];
     }
-    function getHours() {
-      return [...Array(24).keys()];
+    let getHours =() => {
+       const today = new Date()
+      return [...Array(24).keys()].slice(today.getHours() + 1)
     }
     return {
       date: new Date().getDate(),
@@ -185,6 +186,16 @@ export default {
       }
     },
   },
+  watch: {
+    date(val) {
+      const today = new Date()
+      if(val === today.getDate()) {
+        this.data[1].list =  [...Array(24).keys()].slice(today.getHours() + 1)
+      } else {
+        this.data[1].list=  [...Array(24).keys()];
+      }
+    }
+  }
 };
 </script>
 

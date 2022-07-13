@@ -57,8 +57,8 @@
           >
             <a-col
               span="24"
-              v-for="(item, key) in getVariables.currentProgram"
-              :key="key"
+              v-for="(item, index) of getVariables.currentProgram"
+              :key="index"
             >
               <nuxt-link
                 :to="`/exercises/${item.exercise_id}`"
@@ -66,10 +66,9 @@
                 class="col-link"
               >
                 <div class="employment-card">
-                  <h4>{{ key }}</h4>
+                  <h4>{{ item.title }}</h4>
                   <span
-                    >Подходы: {{ item.approach }} х 60 сек / Отдых:
-                    {{ item.rest_sec }} сек</span
+                    >{{ getVariables && getVariables.currentLesson[item.title] }}</span
                   >
                 </div>
               </nuxt-link>
