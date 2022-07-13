@@ -87,7 +87,7 @@ export default {
       if (this.getProgram && this.getProgram.option === "сек") {
         if (
           this.getVariables.side &&
-          this.getVariables.side == "Правая строна"
+          this.getVariables.side == "Правая сторона"
         ) {
           this.actionSeconds = this.getProgram.right;
         } else {
@@ -105,7 +105,7 @@ export default {
         this.isRelax = false;
         if (
           this.getVariables.side &&
-          this.getVariables.side == "Правая строна"
+          this.getVariables.side == "Правая сторона"
         ) {
           this.actionSeconds = this.getProgram.right;
         } else {
@@ -113,7 +113,7 @@ export default {
           this.actionSeconds = this.getProgram.left;
         }
       }
-    }, 1000);
+    }, 300);
     // this.approach = this.getVariables && this.getVariables.approachNumber;
     // localStorage.setItem("approach", this.approach);
   },
@@ -137,16 +137,16 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "not_able",
         });
-        const { exerciseId } = data.variables;
+        const { exercise : {exercise_id} } = data.variables;
         this.$store.commit("home/setVariables", data.variables);
         const { title } = data.currentNode;
         this.isFinish = false;
         // clearInterval(this.timer);
-        this.smartRouter(title, exerciseId);
+        this.smartRouter(title, exercise_id);
         if (this.getProgram.option === "сек") {
           if (
             this.getVariables.side &&
-            this.getVariables.side == "Правая строна"
+            this.getVariables.side == "Правая сторона"
           ) {
             this.actionSeconds = this.getProgram.right;
           } else {
@@ -156,7 +156,7 @@ export default {
           this.isRelax = false;
           if (
             this.getVariables.side &&
-            this.getVariables.side == "Правая строна"
+            this.getVariables.side == "Правая сторона"
           ) {
             this.actionSeconds = this.getProgram.right;
           } else {
@@ -180,9 +180,13 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "done",
         });
-        const { exerciseId } = data.variables;
+        const { exercise } = data.variables;
+        const {exercise_id} = exercise ? exercise: {}
         this.$store.commit("home/setVariables", data.variables);
         const { title } = data.currentNode;
+        if(!this.getProgram) {
+          this.smartRouter(title)
+        }
         if (
           this.approach < this.getProgram.approach ||
           this.getVariables.approachNumber === 3
@@ -193,7 +197,7 @@ export default {
           if (this.getProgram.option === "сек") {
             if (
               this.getVariables.side &&
-              this.getVariables.side == "Правая строна"
+              this.getVariables.side == "Правая сторона"
             ) {
               this.actionSeconds = this.getProgram.right;
             } else {
@@ -206,16 +210,18 @@ export default {
               } else {
                 this.isFinish = true;
                 clearInterval(this.timer);
-                this.restSeconds = 10;
+                this.restSeconds = this.getProgram && this.getProgram.rest_sec;
               }
             }, 1000);
           } else {
             this.isRelax = false;
+            console.log(this.getVariables);
             if (
               this.getVariables.side &&
-              this.getVariables.side == "Правая строна"
+              this.getVariables.side == "Правая сторона"
             ) {
               this.actionSeconds = this.getProgram.right;
+              console.log(this.actionSeconds, this.getProgram.right);
             } else {
               this.actionSeconds = this.getProgram.left;
             }
@@ -224,9 +230,10 @@ export default {
           this.isFinish = true;
           clearInterval(this.timer);
           localStorage.removeItem("approach");
-          this.smartRouter(title, exerciseId);
+          exercise_id ? this.smartRouter(title, exercise_id): this.smartRouter(title);
         }
       } catch (error) {
+        console.error(error);
         const {
           data: { message },
         } = error.response;
@@ -258,7 +265,7 @@ export default {
       this.isRelax = true;
       this.isFinish = true;
       clearInterval(this.timer);
-      this.restSeconds = 10;
+      this.restSeconds = this.getProgram && this.getProgram.rest_sec;
     },
   },
   computed: {

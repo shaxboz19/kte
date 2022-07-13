@@ -16,7 +16,7 @@
               <div class="home-card">
                 <h4>Занятий пройдено</h4>
                 <span class="home-card-blue">
-                  {{ (getVariables && getVariables.lesson) || 0 }}
+                  {{ (getVariables && getVariables.clientData && getVariables.clientData.completed) || 0 }}
                   <span
                     >/{{
                       (getVariables && getVariables.countLesson) || 0
@@ -90,7 +90,9 @@ export default {
       changeDate: false,
     };
   },
-  mounted() {},
+  mounted() {
+    localStorage.setItem('approach', 1)
+  },
   methods: {
     async onChangeDate() {
       try {
@@ -110,8 +112,8 @@ export default {
         const id =
           data.variables &&
           data.variables.currentProgram &&
-          data.variables.currentProgram[key] &&
-          data.variables.currentProgram[key].exercise_id;
+          data.variables.currentProgram[0] &&
+          data.variables.currentProgram[0].exercise_id;
         this.smartRouter(title, id);
       } catch (error) {
         const {
