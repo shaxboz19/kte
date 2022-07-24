@@ -15,10 +15,7 @@
       <div class="employment-detail-wrapper">
         <div class="employment-detail-header" v-if="getExercise && getProgram">
           <h4>{{ getExercise.exercise }}</h4>
-          <span
-            >Подходы: {{ getProgram.approach }} х 60 сек / Отдых:
-            {{ getProgram.rest_sec }} сек</span
-          >
+          <span>{{ this.getCurrentLesson }}</span>
         </div>
         <div class="employment-detail-content" v-if="getExercise">
           <b>⚽ Вам потребуется: </b>
@@ -145,7 +142,16 @@ export default {
       return (
         this.getVariables &&
         this.getExercise &&
-        this.getVariables.currentProgram[this.getExercise.exercise]
+        this.getVariables.currentProgram.find(
+          (i) => i.exercise_id == this.getExercise.exercise_id
+        )
+      );
+    },
+    getCurrentLesson() {
+      return (
+        this.getVariables &&
+        this.getExercise &&
+        this.getVariables.currentLesson[this.getExercise.exercise]
       );
     },
     getUrlId() {
