@@ -163,13 +163,12 @@ export default {
 
 <style>
 .employment-detail-footer {
-  position: fixed;
+  position: static;
   bottom: 0;
-  width: 535px;
   background-color: #fff;
   padding-bottom: 8px;
 }
 .employment-detail-content {
-  padding-bottom: 110px;
+  padding-bottom: 0;
 }
 </style>
