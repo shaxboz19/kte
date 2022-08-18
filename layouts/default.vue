@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" v-if="!isError">
+  <div class="wrapper" v-if="true">
     <header class="header">
       <div class="container">
         <div class="header-wrapper">
@@ -32,7 +32,6 @@ export default {
     if (!localStorage.getItem("client")) {
       this.$store.commit("setError", true);
     }
-    
   },
   methods: {
     async getDetail() {
@@ -45,9 +44,10 @@ export default {
         this.$store.commit("setError", true);
       }
       const { title } = currentNode;
-      const id = variables && variables.exercise && variables.exercise.exercise_id
-      this.$store.commit('home/setVariables', variables)
-      id ? this.smartRouter(title, id) : this.smartRouter(title)
+      const id =
+        variables && variables.exercise && variables.exercise.exercise_id;
+      this.$store.commit("home/setVariables", variables);
+      id ? this.smartRouter(title, id) : this.smartRouter(title);
     },
   },
   computed: {
