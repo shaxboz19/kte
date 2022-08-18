@@ -20,12 +20,7 @@
           <span class="exercise-time">секунд</span>
         </li>
       </ul>
-      <p class="text">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Libero soluta
-        dolores similique temporibus omnis dolore distinctio reprehenderit
-        aliquam, eaque nostrum voluptate suscipit voluptatum, dignissimos totam
-        et molestias? Expedita, necessitatibus dolorum.
-      </p>
+      <p class="text" v-if="false"></p>
     </div>
     <div class="pages-action">
       <a-row :gutter="[8, 8]">

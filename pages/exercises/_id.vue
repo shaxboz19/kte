@@ -15,7 +15,7 @@
       <div class="employment-detail-wrapper">
         <div class="employment-detail-header" v-if="getExercise && getProgram">
           <h4>{{ getExercise.exercise }}</h4>
-          <span>{{ this.getCurrentLesson }}</span>
+          <span v-html="getText(this.getCurrentLesson)"></span>
         </div>
         <div class="employment-detail-content" v-if="getExercise">
           <b>⚽ Вам потребуется: </b>
@@ -125,6 +125,9 @@ export default {
     },
     closePopup() {
       this.isPopup = false;
+    },
+    getText(value) {
+      return value.split("\n").join("<br/>");
     },
   },
   computed: {
