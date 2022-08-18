@@ -77,8 +77,7 @@ export default {
     };
   },
   mounted() {
-    setTimeout(() => {
-    }, 1000)
+    setTimeout(() => {}, 1000);
     if (localStorage.getItem("approach") == "undefined") {
       localStorage.setItem("approach", 1);
       this.approach = 1;
@@ -137,7 +136,9 @@ export default {
         const { data } = await this.$axios.post(`/${this.client}/request`, {
           code: "not_able",
         });
-        const { exercise : {exercise_id} } = data.variables;
+        const {
+          exercise: { exercise_id },
+        } = data.variables;
         this.$store.commit("home/setVariables", data.variables);
         const { title } = data.currentNode;
         this.isFinish = false;
@@ -181,11 +182,11 @@ export default {
           code: "done",
         });
         const { exercise } = data.variables;
-        const {exercise_id} = exercise ? exercise: {}
+        const { exercise_id } = exercise ? exercise : {};
         this.$store.commit("home/setVariables", data.variables);
         const { title } = data.currentNode;
-        if(!this.getProgram) {
-          this.smartRouter(title)
+        if (!this.getProgram) {
+          this.smartRouter(title);
         }
         if (
           this.approach < this.getProgram.approach ||
@@ -230,7 +231,9 @@ export default {
           this.isFinish = true;
           clearInterval(this.timer);
           localStorage.removeItem("approach");
-          exercise_id ? this.smartRouter(title, exercise_id): this.smartRouter(title);
+          exercise_id
+            ? this.smartRouter(title, exercise_id)
+            : this.smartRouter(title);
         }
       } catch (error) {
         console.error(error);
@@ -280,7 +283,7 @@ export default {
       );
     },
     getProgram() {
-      return this.getVariables && this.getVariables.exercise
+      return this.getVariables && this.getVariables.exercise;
     },
   },
   watch: {
