@@ -166,7 +166,7 @@ export default {
 
 <style>
 .employment-detail-footer {
-  position: static;
+  position: sticky;
   bottom: 0;
   background-color: #fff;
   padding-bottom: 8px;
