@@ -20,7 +20,7 @@
           <span class="exercise-time">секунд</span>
         </li>
       </ul>
-      <p class="text" v-if="false"></p>
+      <p class="text" v-if="getProgram && getProgram.comment">{{getProgram.comment}}</p>
     </div>
     <div class="pages-action">
       <a-row :gutter="[8, 8]">
@@ -327,6 +327,7 @@ button.disabled {
   display: none;
 }
 .text {
+  
   padding-top: 16px;
   font-size: 18px;
 }
