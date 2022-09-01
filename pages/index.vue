@@ -67,8 +67,9 @@
               >
                 <div class="employment-card">
                   <h4>{{ item.title }}</h4>
-                  <span
-                    >{{ getVariables && getVariables.currentLesson[item.title] }}</span
+                  <span v-if="getVariables"
+                  v-html="getText(getVariables.currentLesson[item.title])"
+                    ></span
                   >
                 </div>
               </nuxt-link>
@@ -94,6 +95,9 @@ export default {
     localStorage.setItem('approach', 1)
   },
   methods: {
+    getText(value) {
+      return value.split("\n").join("<br/>");
+    },
     async onChangeDate() {
       try {
         this.changeDate = true;
